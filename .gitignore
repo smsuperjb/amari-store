@@ -4,14 +4,28 @@ debug.php
 # Never commit credentials if any are added later
 .env
 *.env
-**/database.php
+/database.php
 **/config.local.php
 
-# Uploads live outside this folder (/shopapay_api/uploads), but guard anyway
-uploads/
 
 # OS / editor junk
 .DS_Store
 __MACOSX/
 ._*
 *.log
+
+# ── shopapay_api (app backend + admin) ──
+# Server-only: real logins/secrets. Templates are *.example.php
+shopapay_api/config/database.php
+shopapay_api/config/secrets.php
+# Uploaded photos stay on the server (code files inside uploads/banners are tracked)
+shopapay_api/uploads/*
+!shopapay_api/uploads/banners/
+shopapay_api/uploads/banners/*
+!shopapay_api/uploads/banners/*.php
+# Order debug dumps contain customer names/addresses
+shopapay_api/api/orders/*.txt
+# Unused bundled copies of PhpSpreadsheet (nothing requires them) and its web installer
+shopapay_api/libs/
+shopapay_api/vendor/
+shopapay_api/install_spreadsheet.php

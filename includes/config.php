@@ -5,6 +5,7 @@
  */
 if (!isset($pdo)) {
     $dbCandidates = [
+        dirname(__DIR__) . '/shopapay_api/config/database.php',          // store/shopapay_api (current home)
         $_SERVER['DOCUMENT_ROOT'] . '/shopapay_api/config/database.php',
         dirname(__DIR__, 2) . '/shopapay_api/config/database.php',
         dirname(__DIR__, 1) . '/../shopapay_api/config/database.php',
@@ -31,8 +32,8 @@ define('CURRENCY',    '₱');
 define('ASSETS_URL',  STORE_URL . '/assets');
 
 // Uploads base (filesystem + URL)
-define('UPLOADS_FS',  $_SERVER['DOCUMENT_ROOT'] . '/shopapay_api/uploads/');
-define('UPLOADS_URL', 'https://amariaestheticsph.com/shopapay_api/uploads/');
+define('UPLOADS_FS',  dirname(__DIR__) . '/shopapay_api/uploads/');
+define('UPLOADS_URL', STORE_URL . '/shopapay_api/uploads/');
 
 // ── HELPERS ──────────────────────────────────────────────────
 
@@ -66,7 +67,8 @@ function productImageUrl(?string $img): string {
 function bannerImageUrl(array $banner): string {
     // Use stored full URL if available
     if (!empty($banner['image_url']) && str_starts_with($banner['image_url'], 'http')) {
-        return $banner['image_url'];
+        // Older rows point at /shopapay_api/ from before it moved into /store/
+        return str_replace('amariaestheticsph.com/shopapay_api/', 'amariaestheticsph.com/store/shopapay_api/', $banner['image_url']);
     }
     // Fall back to filename
     if (!empty($banner['image'])) {

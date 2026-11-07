@@ -1,0 +1,43 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /store/shopapay_api/
+
+    # Allow direct access to PHP files
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ - [L]
+
+    # Prevent directory listing
+    Options -Indexes
+</IfModule>
+
+# CORS headers for Flutter
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+# Handle OPTIONS preflight
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=204,L]
+
+<Files "add-product.php">
+    <LimitExcept GET POST>
+        Deny from all
+    </LimitExcept>
+</Files>
+
+ptions -Indexes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /store/shopapay_api/
+</IfModule>
+
+# Allow all HTTP methods
+<LimitExcept GET POST PUT DELETE>
+    Deny from all
+</LimitExcept>
+
+# Ensure PHP files are executed
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
