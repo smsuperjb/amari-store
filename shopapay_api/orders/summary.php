@@ -2,8 +2,9 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 require_once '../config/database.php';
+require_once __DIR__ . '/../includes/auth_guard.php';
 
-$user_id = $_GET['user_id'] ?? null;
+$user_id = api_user_id($_GET['user_id'] ?? 0);
 
 if (!$user_id) {
     echo json_encode(["status" => "error", "message" => "user_id required"]);
@@ -44,7 +45,7 @@ try {
 } catch (Exception $e) {
     echo json_encode([
         "status" => "error",
-        "message" => $e->getMessage()
+        "message" => "Could not load the summary"
     ]);
 }
 ?>

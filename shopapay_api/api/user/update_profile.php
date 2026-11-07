@@ -2,6 +2,7 @@
 header('Content-Type: application/json');
 
 require_once '../../config/database.php';
+require_once __DIR__ . '/../../includes/auth_guard.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(["status" => "error", "message" => "Invalid request method"]);
@@ -9,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 try {
-    $user_id = (int)($_POST['user_id'] ?? 0);
+    $user_id = api_user_id($_POST['user_id'] ?? 0);
     if ($user_id <= 0) {
         echo json_encode(["status" => "error", "message" => "Invalid user_id"]);
         exit;
@@ -98,7 +99,7 @@ try {
 } catch (Exception $e) {
     echo json_encode([
         "status" => "error",
-        "message" => "Server error: " . $e->getMessage()
+        "message" => "Server error"
     ]);
 }
 ?>

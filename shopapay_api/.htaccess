@@ -1,3 +1,9 @@
+# Pass the app's "Authorization: Bearer <token>" header through to PHP
+# (Apache with PHP-FPM drops it otherwise). Used by includes/auth_guard.php.
+<IfModule mod_setenvif.c>
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /store/shopapay_api/

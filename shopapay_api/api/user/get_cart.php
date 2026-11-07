@@ -1,8 +1,9 @@
 <?php
 header('Content-Type: application/json');
 require_once '../../config/database.php';
+require_once __DIR__ . '/../../includes/auth_guard.php';
 
-$userId = $_GET['user_id'] ?? null;
+$userId = api_user_id($_GET['user_id'] ?? 0);
 if (!$userId) {
     echo json_encode(["status" => "error", "message" => "user_id required"]);
     exit;
@@ -21,6 +22,6 @@ try {
     $items = json_decode($row['items'], true) ?? [];
     echo json_encode(["status" => "success", "items" => $items]);
 } catch (Exception $e) {
-    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    echo json_encode(["status" => "error", "message" => "Could not load the cart"]);
 }
 ?>

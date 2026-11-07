@@ -17,25 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // 🔧 DEBUG — log what we're comparing
-    $debug_stmt = $pdo->prepare("SELECT otp, used, expires_at FROM password_resets WHERE email = ? ORDER BY created_at DESC LIMIT 1");
-    $debug_stmt->execute([$email]);
-    $debug = $debug_stmt->fetch();
-
-    $db_now_stmt = $pdo->query("SELECT NOW() as db_now");
-    $db_now = $db_now_stmt->fetch()['db_now'];
-
-    $debug_info = [
-        "db_otp"      => $debug['otp']       ?? 'NOT FOUND',
-        "db_used"     => $debug['used']       ?? 'NOT FOUND',
-        "db_expires"  => $debug['expires_at'] ?? 'NOT FOUND',
-        "db_now"      => $db_now,
-        "php_now"     => date('Y-m-d H:i:s'),
-        "input_otp"   => $otp,
-        "input_email" => $email,
-        "otp_match"   => isset($debug['otp']) ? ($debug['otp'] === $otp ? 'YES' : 'NO') : 'NO RECORD',
-    ];
-
     // Find valid unused OTP
     $stmt = $pdo->prepare("
         SELECT * FROM password_resets
@@ -53,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode([
             "status"  => "error",
             "message" => "Invalid or expired OTP",
-            "debug"   => $debug_info,   // 🔧 TEMPORARY — remove after testing
         ]);
         exit;
     }
@@ -76,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         "status"      => "success",
         "message"     => "OTP verified successfully",
         "reset_token" => $reset_token,
-        "debug"       => $debug_info,   // 🔧 TEMPORARY — remove after testing
     ]);
 
 } else {
