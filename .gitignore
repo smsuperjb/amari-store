@@ -1,0 +1,17 @@
+# Debug page: shows server paths and database rows publicly. Keep off the live site.
+debug.php
+
+# Never commit credentials if any are added later
+.env
+*.env
+**/database.php
+**/config.local.php
+
+# Uploads live outside this folder (/shopapay_api/uploads), but guard anyway
+uploads/
+
+# OS / editor junk
+.DS_Store
+__MACOSX/
+._*
+*.log

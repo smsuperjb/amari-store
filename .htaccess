@@ -1,0 +1,22 @@
+# Force index.php as the default directory file
+DirectoryIndex index.php
+
+RewriteEngine On
+RewriteBase /store/
+
+# 1. If the request is for an existing file or directory, stop
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 2. Redirect /store/index.php to /store/
+RewriteCond %{THE_REQUEST} /store/index\.php
+RewriteRule ^index\.php$ /store/ [R=301,L]
+
+# 3. Redirect /store/file.php to /store/file
+RewriteCond %{THE_REQUEST} /store/([^\s]+)\.php
+RewriteRule ^ /store/%1 [R=301,L]
+
+# 4. Internally rewrite /store/file to /store/file.php
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^/]+)/?$ $1.php [L]
