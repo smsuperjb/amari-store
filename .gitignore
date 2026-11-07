@@ -18,11 +18,6 @@ __MACOSX/
 # Server-only: real logins/secrets. Templates are *.example.php
 shopapay_api/config/database.php
 shopapay_api/config/secrets.php
-# Uploaded photos stay on the server (code files inside uploads/banners are tracked)
-shopapay_api/uploads/*
-!shopapay_api/uploads/banners/
-shopapay_api/uploads/banners/*
-!shopapay_api/uploads/banners/*.php
 # Order debug dumps contain customer names/addresses
 shopapay_api/api/orders/*.txt
 # Unused bundled copies of PhpSpreadsheet (nothing requires them) and its web installer

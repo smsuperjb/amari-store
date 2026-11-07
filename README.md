@@ -17,4 +17,4 @@ Lives at `store/shopapay_api` (moved from `public_html/shopapay_api` on 2026-11-
 Server-only files (not in GitHub, upload by hand):
 - `shopapay_api/config/database.php` (template: `database.example.php`)
 - `shopapay_api/config/secrets.php` holds JWT_SECRET, RESET_SECRET, ADMIN_SECRET, SMTP_PASS (template: `secrets.example.php`)
-- `shopapay_api/uploads/` photos
+Photos in `shopapay_api/uploads/` are tracked so they deploy too. New photos uploaded through the admin land on the server only; copy them into the repo to keep it in sync.
