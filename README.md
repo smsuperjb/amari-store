@@ -2,7 +2,7 @@
 
 The online store for amariaestheticsph.com, served from `public_html/store` on Hostinger.
 
-Pushes to `main` deploy automatically through hPanel > Advanced > Git.
+Pushes to `main` deploy automatically: GitHub Actions uploads changed files over FTP (`.github/workflows/deploy.yml`). FTP login is stored in the repo's Actions secrets/variables `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD` (optional `FTP_DIR`, default `public_html/store/`).
 
 ## What is not in this repo
 

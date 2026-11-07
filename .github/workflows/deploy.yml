@@ -1,0 +1,32 @@
+name: Deploy store to Hostinger (FTP)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-store
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload changed files over FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # Works whether the values were saved as repo Secrets or Variables
+          server: ${{ secrets.FTP_SERVER || vars.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME || vars.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD || vars.FTP_PASSWORD }}
+          # Folder on the server, relative to where the FTP account logs in.
+          # Override with a repo variable FTP_DIR if the account starts somewhere else.
+          server-dir: ${{ vars.FTP_DIR || 'public_html/store/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md
