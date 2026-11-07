@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/auth_guard.php';
 
 // 🔥 Accept BOTH JSON and form-data
 $raw = file_get_contents("php://input");
@@ -14,7 +15,7 @@ if (!$input) {
 // echo json_encode(["input" => $input]); exit;
 
 // Assign values
-$user_id = intval($input['user_id'] ?? 0);
+$user_id = api_user_id($input['user_id'] ?? 0);
 $label = trim($input['label'] ?? 'Home');
 $full_address = trim($input['full_address'] ?? '');
 
@@ -74,7 +75,7 @@ try {
 } catch (PDOException $e) {
     echo json_encode([
         "status" => "error",
-        "message" => $e->getMessage()
+        "message" => "Could not save the address"
     ]);
 }
 ?>

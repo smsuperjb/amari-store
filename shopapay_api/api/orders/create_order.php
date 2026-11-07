@@ -1,8 +1,8 @@
 <?php
 header('Content-Type: application/json');
 require_once '../../config/database.php';
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+require_once __DIR__ . '/../../includes/auth_guard.php';
+ini_set('display_errors', 0);
 
 // ================= GET INPUT =================
 $data = json_decode(file_get_contents("php://input"), true);
@@ -11,8 +11,6 @@ if (!$data) {
     exit;
 }
 
-// ================= DEBUG =================
-file_put_contents("debug_order.txt", json_encode($data, JSON_PRETTY_PRINT));
 
 // ================= EXTRACT VALUES =================
 $order_id = "ORD-" . str_pad(
@@ -22,7 +20,7 @@ $order_id = "ORD-" . str_pad(
     STR_PAD_LEFT
 );
 
-$user_id        = $data["user_id"]        ?? 0;
+$user_id        = api_user_id($data["user_id"] ?? 0);
 $total_amount   = $data["total_amount"]   ?? 0;
 $items_array    = $data["items_summary"]  ?? [];
 $address        = $data["address"]        ?? "";

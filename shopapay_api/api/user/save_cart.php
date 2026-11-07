@@ -1,9 +1,10 @@
 <?php
 header('Content-Type: application/json');
 require_once '../../config/database.php';
+require_once __DIR__ . '/../../includes/auth_guard.php';
 
 $data    = json_decode(file_get_contents('php://input'), true);
-$userId  = $data['user_id'] ?? null;
+$userId  = api_user_id($data['user_id'] ?? 0);
 $items   = $data['items']   ?? [];
 
 if (!$userId) {
@@ -26,6 +27,6 @@ try {
 
     echo json_encode(["status" => "success"]);
 } catch (Exception $e) {
-    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    echo json_encode(["status" => "error", "message" => "Could not save the cart"]);
 }
 ?>

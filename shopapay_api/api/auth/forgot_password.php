@@ -60,28 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ");
     $stmt->execute([$email, $otp]);
 
-    // 🔧 TEMPORARY DEBUG — remove after testing is confirmed working
-    $db_now_stmt = $pdo->query("SELECT NOW() as db_now");
-    $db_now = $db_now_stmt->fetch()['db_now'];
-
-    echo json_encode([
-        "status"    => "success",
-        "message"   => "OTP sent to your email",
-        "debug_otp" => $otp,
-        "debug_now" => $db_now,
-    ]);
-    exit;
-
-    // ⬇️ Uncomment this block and remove debug above once email is confirmed working
-    /*
+    // Email the code. It is never returned in the response, because anyone
+    // could then reset any customer's password knowing only their email.
     $sent = sendSmtpMail($email, $otp);
     if ($sent === true) {
         echo json_encode(["status" => "success", "message" => "OTP sent to your email"]);
     } else {
+        error_log("forgot_password: email to $email failed: " . $sent);
         $pdo->prepare("DELETE FROM password_resets WHERE email = ?")->execute([$email]);
-        echo json_encode(["status" => "error", "message" => "Failed to send email: " . $sent]);
+        echo json_encode(["status" => "error", "message" => "We couldn't send the email right now. Please try again later."]);
     }
-    */
 
 } else {
     echo json_encode(["status" => "error", "message" => "Invalid request method"]);

@@ -32,11 +32,11 @@ function verifyJWT($jwt) {
     $validSignature = hash_hmac('sha256', $header . "." . $payload, JWT_SECRET, true);
     $validBase64 = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($validSignature));
 
-    if ($signature !== $validBase64) return false;
+    if (!hash_equals($validBase64, $signature)) return false;
 
     $payloadData = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $payload)), true);
 
-    if ($payloadData['exp'] < time()) return false; // expired
+    if (!is_array($payloadData) || !isset($payloadData['exp']) || $payloadData['exp'] < time()) return false; // expired or malformed
 
     return $payloadData;
 }

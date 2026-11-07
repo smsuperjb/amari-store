@@ -3,13 +3,14 @@ header("Content-Type: application/json");
 error_reporting(0); // 🚨 prevent warnings breaking JSON
 
 require_once '../../config/database.php';
+require_once __DIR__ . '/../../includes/auth_guard.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 if (!$data) {
     $data = $_POST;
 }
 
-$user_id = $data['user_id'] ?? null;
+$user_id = api_user_id($data['user_id'] ?? 0);
 $address_id = $data['address_id'] ?? null;
 
 if (!$user_id || !$address_id) {
@@ -38,7 +39,7 @@ try {
 } catch (Exception $e) {
     echo json_encode([
         "status" => "error",
-        "message" => $e->getMessage()
+        "message" => "Could not update the address"
     ]);
     exit;
 }
